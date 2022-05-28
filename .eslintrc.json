@@ -1,0 +1,43 @@
+{
+  "root": true,
+  "env": {
+    "browser": true,
+    "es2021": true,
+    "node": true
+  },
+  "extends": ["eslint:recommended", "google"],
+  "parserOptions": {
+    "ecmaVersion": "latest",
+    "sourceType": "module"
+  },
+  "rules": {
+    "brace-style": [2, "stroustrup", { "allowSingleLine": true }],
+    "camelcase": ["off"],
+    "comma-dangle" : ["error", {
+      "functions": "never",
+      "objects": "always-multiline"
+    }],
+    "indent": ["off"],
+    "max-len": ["warn", {
+      "code": 120,
+      "ignoreComments": true,
+      "ignorePattern": "(_proto_|\\.call\\()"
+      }],
+    "no-trailing-spaces": "warn",
+    "object-curly-spacing": "off",
+    "one-var": ["off"]
+  },
+  "overrides": [
+    {
+      "files": ["*.jsx"],
+      "rules": {
+        "quotes": "off",
+        "require-jsdoc": ["error", {
+          "require": {
+            "FunctionDeclaration": false
+          }
+        }]
+      }
+    }
+  ]
+}

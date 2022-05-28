@@ -1,0 +1,24 @@
+{
+  "name": "eitherfile",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "exports": {
+    "import": "./dist/index.js",
+    "require": "./dist/index.cjs"
+  },
+  "type": "module",
+  "scripts": {
+    "test": "NODE_OPTIONS='--experimental-vm-modules --trace-warnings' npx jest ./test/index --config=jest.config.json",
+    "build": "npm run build:esm && npm run build:cjs",
+    "build:esm": "npx esbuild ./src/index.js --platform=node --format=esm --outfile=./dist/index.js",
+    "build:cjs": "npx esbuild ./src/index.cjs --platform=node --format=cjs --outfile=./dist/index.cjs"
+  },
+  "keywords": [],
+  "author": "Obinwanne Hill <ohill@restive.io>",
+  "license": "ISC",
+  "devDependencies": {
+    "esbuild": "^0.14.40",
+    "jest": "^28.1.0"
+  }
+}

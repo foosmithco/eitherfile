@@ -1,0 +1,16 @@
+{
+  "verbose": true,
+  "collectCoverage": true,
+  "collectCoverageFrom": [
+      "**/src/*.js",
+      "!**/dist/**",
+      "!**/*.config.js",
+      "!**/node_modules/**",
+      "!**/coverage/**",
+      "!**/_sandbox/**",
+      "!**/_recycle/**"
+  ],
+  "coverageDirectory": "./test/coverage",
+  "testPathIgnorePatterns": ["/node_modules/"],
+  "testTimeout": 120000
+}
