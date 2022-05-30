@@ -133,14 +133,14 @@ describe('Main', function() {
     test('should find second file from list of files', function() {
       const path_arr = ['.ver', 'readme.md', '.env-other'];
       const result_any = eitherFile(path_arr, {base: './test/assets/dirs/base/sub1/sub2', up: 2});
-  
+
       // get portion of result
       const result_sub_str = _sliceFrom(result_any, '/', -1);
-  
+
       console.log('result_any =', result_any);
       console.log('result_sub_str =', result_sub_str);
-  
-      const result_bool = !!(_proto_str.match.call(path_arr[1], result_sub_str));
+
+      const result_bool = !!(_proto_str.match.call(path_arr[0], result_sub_str));
       expect(result_bool).toBe(true);
     });
   });
@@ -198,8 +198,174 @@ describe('Main', function() {
     });
   });
 
-  describe(`Using 'debug' option`, function() {
+  describe(`Using 'base' + 'down' option`, function() {
     // 1-6-1.
+    test('should find file', function() {
+      const path_str = 'readme.md';
+      const result_any = eitherFile(path_str, {base: './test/assets/dirs/base/sub1/sub2', down: 2});
+      console.log('result_any =', result_any);
+
+      expect(!!result_any).toBe(true);
+    });
+
+    // 1-6-2.
+    test('should find first file from list of files', function() {
+      const path_arr = ['.ver', 'readme.md', '.env-other'];
+      const result_any = eitherFile(path_arr, {base: './test/assets/dirs/base/sub1/sub2', down: 1});
+  
+      // get portion of result
+      const result_sub_str = _sliceFrom(result_any, '/', -1);
+  
+      console.log('result_any =', result_any);
+      console.log('result_sub_str =', result_sub_str);
+  
+      const result_bool = !!(_proto_str.match.call(path_arr[0], result_sub_str));
+      expect(result_bool).toBe(true);
+    });
+  });
+
+  describe(`Using 'base' + 'down' + 'excludeDir' option`, function() {
+    // 1-7-1.
+    test('should find file', function() {
+      const path_str = 'readme.md';
+      const result_any = eitherFile(path_str, {base: './test/assets/dirs/base/sub1/sub2', down: 2, excludeDir: /sub4$/});
+      console.log('result_any =', result_any);
+
+      expect(!!result_any).toBe(true);
+    });
+
+    // 1-7-2.
+    test('should find first file from list of files', function() {
+      const path_arr = ['.ver', 'readme.md', '.env-other'];
+      const result_any = eitherFile(path_arr, {base: './test/assets/dirs/base/sub1/sub2', down: 2});
+  
+      // get portion of result
+      const result_sub_str = _sliceFrom(result_any, '/', -1);
+  
+      console.log('result_any =', result_any);
+      console.log('result_sub_str =', result_sub_str);
+  
+      const result_bool = !!(_proto_str.match.call(path_arr[0], result_sub_str));
+      expect(result_bool).toBe(true);
+    });
+  });
+  
+  describe(`Using 'base' + 'down' + 'contains' option`, function() {
+    // 1-8-1.
+    test('should find file - string search', function() {
+      const path_str = 'readme.md';
+      const result_any = eitherFile(path_str, {base: './test/assets/dirs/base/sub1/sub2', down: 2, contains: '# File'});
+      console.log('result_any =', result_any);
+
+      expect(!!result_any).toBe(true);
+    });
+
+    // 1-8-2.
+    test('should find file - array search', function() {
+      const path_str = 'readme.md';
+      const result_any = eitherFile(path_str, {base: './test/assets/dirs/base/sub1/sub2', down: 2, contains: ['file', 'Some']});
+      console.log('result_any =', result_any);
+
+      expect(!!result_any).toBe(true);
+    });
+
+    // 1-8-3.
+    test('should find file - regexp search', function() {
+      const path_str = 'readme.md';
+      const result_any = eitherFile(path_str, {base: './test/assets/dirs/base/sub1/sub2', down: 2, contains: /file/i});
+      console.log('result_any =', result_any);
+
+      expect(!!result_any).toBe(true);
+    });
+
+    // 1-8-4.
+    test('should find file - mixed array search', function() {
+      const path_str = 'readme.md';
+      const result_any = eitherFile(path_str, {base: './test/assets/dirs/base/sub1/sub2', down: 2, contains: ['just', 'some', /file/i]});
+      console.log('result_any =', result_any);
+
+      expect(!!result_any).toBe(true);
+    });
+
+    // 1-8-5.
+    test('should find third file from list of files - array search', function() {
+      const path_arr = ['.ver', '.env-other', 'sub2/sub3/.ver'];
+      const result_any = eitherFile(path_arr, {base: './test/assets/dirs/base/sub1', down: 2, contains: ['Blank', '1.0.2']});
+  
+      // get portion of result
+      const result_sub_str = _sliceFrom(result_any, '/', -3);
+  
+      console.log('result_any =', result_any);
+      console.log('result_sub_str =', result_sub_str);
+  
+      const result_bool = !!(_proto_str.match.call(path_arr[2], result_sub_str));
+      expect(result_bool).toBe(true);
+    });
+  });
+
+  describe(`Using 'base' + 'down' + 'contains' + 'excludeDir' option`, function() {
+    // 1-9-1.
+    test('should find file - string search', function() {
+      const path_str = '.ver';
+      const result_any = eitherFile(path_str, {base: './test/assets/dirs/base/sub1/sub2', down: 2, contains: '1.0.', excludeDir: /sub3$/});
+      console.log('result_any =', result_any);
+
+      // get portion of result
+      const result_sub_str = _sliceFrom(result_any, '/', -2);
+  
+      console.log('result_any =', result_any);
+      console.log('result_sub_str =', result_sub_str);
+  
+      const result_bool = !!(_proto_str.match.call('sub3-alt/.ver', result_sub_str));
+
+      expect(result_bool).toBe(true);
+    });
+
+    // 1-9-2.
+    test('should find file - array search', function() {
+      const path_str = 'readme.md';
+      const result_any = eitherFile(path_str, {base: './test/assets/dirs/base/sub1/sub2', down: 2, contains: ['file', 'Some'], excludeDir: /sub3$/});
+      console.log('result_any =', result_any);
+
+      expect(!!result_any).toBe(true);
+    });
+
+    // 1-9-3.
+    test('should find file - regexp search', function() {
+      const path_str = 'readme.md';
+      const result_any = eitherFile(path_str, {base: './test/assets/dirs/base/sub1/sub2', down: 2, contains: /sub4/i, excludeDir: 'sub4(?:-alt|)$'});
+      console.log('result_any =', result_any);
+
+      expect(!!result_any).toBe(true);
+    });
+
+    // 1-9-4.
+    test('should find file - mixed array search', function() {
+      const path_str = 'readme.md';
+      const result_any = eitherFile(path_str, {base: './test/assets/dirs/base/sub1/sub2', down: 2, contains: ['just', 'Some', /none/i], excludeDir: /sub(?:3|4-alt2)$/});
+      console.log('result_any =', result_any);
+
+      expect(!!result_any).toBe(true);
+    });
+
+    // 1-9-5.
+    test('should find second file from list of files - array search', function() {
+      const path_arr = ['.ver', '.env-other', 'readme.md'];
+      const result_any = eitherFile(path_arr, {base: './test/assets/dirs/base', down: 3, contains: ['Blank', 'sub2'], excludeDir: /sub2$/});
+  
+      // get portion of result
+      const result_sub_str = _sliceFrom(result_any, '/', -2);
+  
+      console.log('result_any =', result_any);
+      console.log('result_sub_str =', result_sub_str);
+  
+      const result_bool = !!(_proto_str.match.call(`sub2-alt/${path_arr[1]}`, result_sub_str));
+      expect(result_bool).toBe(true);
+    });
+  });
+
+  describe(`Using 'debug' option`, function() {
+    // 1-10-1.
     test('should return result of object type', function() {
       const path_str = 'readme.md';
       const result_any = eitherFile(path_str, {base: './test/assets/dirs/base/sub1/sub2', up: 2, debug: true});
@@ -208,7 +374,7 @@ describe('Main', function() {
       expect(typeof result_any).toBe('object');
     });
 
-    // 1-6-2.
+    // 1-10-2.
     test('should return result object with defined properties', function() {
       const path_str = 'readme.md';
       const result_any = eitherFile(path_str, {base: './test/assets/dirs/base/sub1/sub2', up: 2, debug: true});
@@ -244,6 +410,33 @@ describe('Exception', function() {
     });
 
     // 2-2.
+    test('should not find any files - \'delim\' value is wrong', function() {
+      const path_arr = '.env,.env-other';
+      const result_any = eitherFile(path_arr, {base: './test/assets/dirs/base/sub1/sub2', up: 2, delim: '|'});
+      console.log('result_any =', result_any);
+
+      expect(!!result_any).toBe(false);
+    });
+    
+    // 2-3.
+    test('should not find any files - path is list of invalid inputs', function() {
+      const path_arr = [12, null];
+      const result_any = eitherFile(path_arr, {base: './test/assets/dirs/base/sub1/sub2', up: 2});
+      console.log('result_any =', result_any);
+
+      expect(!!result_any).toBe(false);
+    });
+
+    // 2-4.
+    test('should find a file - path is list of semi-valid inputs', function() {
+      const path_arr = [12, '12', null];
+      const result_any = eitherFile(path_arr, {base: './test/assets/dirs/base', down: 2});
+      console.log('result_any =', result_any);
+
+      expect(!!result_any).toBe(true);
+    });
+
+    // 2-5.
     test(`should not find any files - 'contains' value is plain object`, function() {
       const path_str = 'readme.md';
       const result_any = eitherFile(path_str, {base: './test/assets/dirs/base/sub1/sub2', up: 2, contains: {keyword: 'test'}});
@@ -251,6 +444,23 @@ describe('Exception', function() {
 
       expect(result_any).toBe(null);
     });
+
+    // 2-6.
+    test(`should not find a file - 'down' value is 0`, function() {
+      const path_str = '12';
+      const result_any = eitherFile(path_str, {base: './test/assets/dirs/base', down: 0});
+      console.log('result_any =', result_any);
+
+      expect(result_any).toBe(null);
+    });
+
+    // 2-7.
+    test(`should find a file - 'excludeDir' value is invalid`, function() {
+      const path_str = '12';
+      const result_any = eitherFile(path_str, {base: './test/assets/dirs/base/sub1', down: 3, excludeDir: undefined});
+      console.log('result_any =', result_any);
+
+      expect(!!result_any).toBe(true);
+    });
   });
-  
 });
