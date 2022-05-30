@@ -174,13 +174,9 @@ export default function eitherFile(path_str_or_arr, options_obj) {
 
     // normalize the base path
     opt_base_dir_str = normalize(opt_base_dir_str);
-    console.log('opt_base_dir_str normalized =', opt_base_dir_str);
 
     // normalize path to array
     const path_arr = (path_type_str === 'array') ? path_str_or_arr : _proto_str.split.call(path_str_or_arr, opt_delim_str);
-
-    console.log('path_arr =', path_arr);
-    console.log('process.cwd() =', process.cwd());
 
     // define cache for directory crawl [for `down` option]
     const crawl_cache_obj = {};
@@ -199,8 +195,6 @@ export default function eitherFile(path_str_or_arr, options_obj) {
       // resolve the path
       const _path_str = resolve(opt_base_dir_str, _input_any);
 
-      console.log('_path_str =', _path_str);
-
       // parse path
       const path_info_obj = parse(_path_str);
 
@@ -216,9 +210,14 @@ export default function eitherFile(path_str_or_arr, options_obj) {
 
       // check if file exists
       if (_checkFileExists(file_full_str)) {
-        console.log('--file--');
-
+        /** file is found */
         if (!opt_contains_any || (opt_contains_any && _checkFileContains(file_full_str, opt_contains_any))) {
+          /**
+           * 1. 'contains' option not provided, or
+           * 2. 'contains' option provided and file contains defined value(s)
+           * - save file info
+           */
+
           // set file path
           _acc_obj.file = file_str;
           _acc_obj.full = file_full_str;
@@ -236,8 +235,10 @@ export default function eitherFile(path_str_or_arr, options_obj) {
          * Traverse the directory tree upwards
          */
 
+        // initialize upper directory variable
         let file_root_up_str = file_root_str;
 
+        // traverse directory upwards
         for (let i = 0; i < opt_up_int; i++) {
           /** go up one directory per iteration */
 
@@ -251,7 +252,14 @@ export default function eitherFile(path_str_or_arr, options_obj) {
           file_full_str = `${file_root_up_str}/${file_str}`;
 
           if (_checkFileExists(file_full_str)) {
+            /** file is found */
             if (!opt_contains_any || (opt_contains_any && _checkFileContains(file_full_str, opt_contains_any))) {
+              /**
+               * 1. 'contains' option not provided, or
+               * 2. 'contains' option provided and file contains defined value(s)
+               * - save file info
+               */
+
               // set file path
               _acc_obj.file = file_str;
               _acc_obj.full = file_full_str;
@@ -268,10 +276,11 @@ export default function eitherFile(path_str_or_arr, options_obj) {
 
       if (opt_down_int > 0) {
         /**
-         * Traverse downwards requested
-         * - Crawl all directories from ompile list of all diles
+         * Traverse downwards
+          * - Crawl all directories for files
          */
 
+        // initialize files list
         let files_arr;
 
         if (crawl_cache_obj[file_root_str]) {
@@ -300,20 +309,30 @@ export default function eitherFile(path_str_or_arr, options_obj) {
 
         // cycle files
         for (let i = 0; i < files_arr.length; i++) {
+          // get file item
           const file_item_str = files_arr[i];
 
-          // set found directory
+          // get directory from file item
           const file_item_dir_str = parse(file_item_str).dir;
-          _acc_obj.dir_found = file_item_dir_str;
 
           // add directory to traversal path
           _proto_arr.push.call(_acc_obj.dirs_all, file_item_dir_str);
 
           if ((_proto_str.match.call(file_item_str, file_str))) {
+            /** file is found */
             if (!opt_contains_any || (opt_contains_any && _checkFileContains(file_item_str, opt_contains_any))) {
+              /**
+               * 1. 'contains' option not provided, or
+               * 2. 'contains' option provided and file contains defined value(s)
+               * - save file info
+               */
+
               // set file path
               _acc_obj.file = file_str;
               _acc_obj.full = file_item_str;
+
+              // set found directory
+              _acc_obj.dir_found = file_item_dir_str;
 
               // return
               return _acc_obj;
@@ -325,8 +344,6 @@ export default function eitherFile(path_str_or_arr, options_obj) {
       // return
       return _acc_obj;
     }, {dirs_all: [], dir_found: null, file: null, full: null});
-
-    console.log('eitherFile result_obj.dirs_all =', result_obj.dirs_all);
 
     return (opt_debug_bool) ? result_obj : result_obj.full;
   }

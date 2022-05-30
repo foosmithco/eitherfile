@@ -9,7 +9,11 @@
   },
   "type": "module",
   "scripts": {
-    "test": "NODE_OPTIONS='--experimental-vm-modules --trace-warnings' npx jest ./test/index --config=jest.config.json",
+    "sandbox": "node $npm_package_config_main_sub_sub1 $npm_package_config_main_sub_sub2",
+    "echo": "echo $npm_package_config_jest_matchcjs",
+    "test": "npm run test:cjs && npm run test:esm",
+    "test:cjs": "npx jest index.test --config=jest.config.cjs.json",
+    "test:esm": "NODE_OPTIONS='--experimental-vm-modules --trace-warnings' npx jest index.test --config=jest.config.json",
     "build": "npm run build:esm && npm run build:cjs",
     "build:esm": "npx esbuild ./src/index.js --platform=node --format=esm --outfile=./dist/index.js",
     "build:cjs": "npx esbuild ./src/index.cjs --platform=node --format=cjs --outfile=./dist/index.cjs"

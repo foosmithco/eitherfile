@@ -2,7 +2,7 @@
   "verbose": true,
   "collectCoverage": true,
   "collectCoverageFrom": [
-      "**/src/*.js",
+      "**/src/*.cjs",
       "!**/dist/**",
       "!**/*.config.js",
       "!**/node_modules/**",
@@ -10,9 +10,9 @@
       "!**/_sandbox/**",
       "!**/_recycle/**"
   ],
-  "coverageDirectory": "./test/coverage/esm",
+  "coverageDirectory": "./test/coverage/cjs",
   "testMatch": [
-    "**/test/*.js"
+    "**/test/*.cjs"
   ],
   "testPathIgnorePatterns": ["/node_modules/"],
   "testTimeout": 120000
