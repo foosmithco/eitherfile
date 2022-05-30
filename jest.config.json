@@ -2,13 +2,7 @@
   "verbose": true,
   "collectCoverage": true,
   "collectCoverageFrom": [
-      "**/src/*.js",
-      "!**/dist/**",
-      "!**/*.config.js",
-      "!**/node_modules/**",
-      "!**/coverage/**",
-      "!**/_sandbox/**",
-      "!**/_recycle/**"
+      "**/src/*.js"
   ],
   "coverageDirectory": "./test/coverage/esm",
   "testMatch": [

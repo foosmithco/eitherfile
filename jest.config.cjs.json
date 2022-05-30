@@ -2,13 +2,7 @@
   "verbose": true,
   "collectCoverage": true,
   "collectCoverageFrom": [
-      "**/src/*.cjs",
-      "!**/dist/**",
-      "!**/*.config.js",
-      "!**/node_modules/**",
-      "!**/coverage/**",
-      "!**/_sandbox/**",
-      "!**/_recycle/**"
+      "**/src/*.cjs"
   ],
   "coverageDirectory": "./test/coverage/cjs",
   "testMatch": [
