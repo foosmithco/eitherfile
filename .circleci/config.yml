@@ -17,7 +17,7 @@ jobs:
           name: Check jest version
           command: npx jest --version
       - run:
-          name: Run unit tests for CommonJS
+          name: Run unit tests for CJS
           command: npm run test:cjs
       - codecov/upload
       - run:
