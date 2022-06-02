@@ -24,7 +24,6 @@ jobs:
           name: Run unit tests for ESM
           command: npm run test:esm
       - codecov/upload
-
 workflows:
   build-main:
     jobs:
