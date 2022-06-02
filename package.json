@@ -1,6 +1,6 @@
 {
   "name": "eitherfile",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "a tentative file-path fetcher for Node.js",
   "main": "./dist/index.js",
   "exports": {

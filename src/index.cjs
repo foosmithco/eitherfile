@@ -313,6 +313,9 @@ function eitherFile(path_str_or_arr, options_obj) {
         // initialize files list
         let files_arr;
 
+        // create regexp from file name
+        const file_regex_str = file_str+'$';
+
         if (cache_dir_crawl_obj[file_root_str]) {
           /**
            * Cached crawl list available
@@ -356,7 +359,7 @@ function eitherFile(path_str_or_arr, options_obj) {
             cache_dirs_all_obj[file_item_dir_str] = true;
           }
 
-          if ((_proto_str.match.call(file_item_str, file_str))) {
+          if ((_proto_str.match.call(file_item_str, file_regex_str))) {
             /** file is found */
             if (!opt_contains_any || (opt_contains_any && _checkFileContains(file_item_str, opt_contains_any))) {
               /**

@@ -125,6 +125,7 @@ function eitherFile(path_str_or_arr, options_obj) {
       }
       if (opt_down_int > 0) {
         let files_arr;
+        const file_regex_str = file_str + "$";
         if (cache_dir_crawl_obj[file_root_str]) {
           files_arr = cache_dir_crawl_obj[file_root_str];
         } else {
@@ -141,7 +142,7 @@ function eitherFile(path_str_or_arr, options_obj) {
             _proto_arr.push.call(_acc_obj.dirs_all, file_item_dir_str);
             cache_dirs_all_obj[file_item_dir_str] = true;
           }
-          if (_proto_str.match.call(file_item_str, file_str)) {
+          if (_proto_str.match.call(file_item_str, file_regex_str)) {
             if (!opt_contains_any || opt_contains_any && _checkFileContains(file_item_str, opt_contains_any)) {
               _acc_obj.file = file_str;
               _acc_obj.full = file_item_str;
