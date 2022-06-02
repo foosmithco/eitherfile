@@ -145,15 +145,15 @@ const file_path = eitherFile({path}, {options});
 
 where:
 - `{path}` is the filename (with extension, if any), or relative path to the file, or list of file names and/or relative paths. `{path}` can be either of `String` or `Array` *type*.
-- `{options}`: is the option definition. `{options}` must be of `Object` *type*. See [Documentation]() on options for details.
+- `{options}`: is the option definition. `{options}` must be of `Object` *type*. See [Documentation](https://github.com/foosmithco/eitherfile#options) on options for details.
 
 
 ## Documentation
 
 The eitherFile function takes two arguments:
 
-- A filename or relative path (*Path*) [String or Array];
-- An options definition (*Options*) [Object]
+- A filename or relative path (*Path*) [*String* or *Array*];
+- An options definition (*Options*) [*Object*]
 
 ### Path
 
