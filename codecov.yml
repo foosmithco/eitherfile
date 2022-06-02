@@ -1,0 +1,9 @@
+codecov:
+  max_report_age: off
+  require_ci_to_pass: yes
+
+coverage:
+  precision: 2
+  round: down
+  range: 90...100
+  
