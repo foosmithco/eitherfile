@@ -1,5 +1,6 @@
 /* eslint-disable max-len */
-import { accessSync, readFileSync, statSync, readdirSync } from 'fs';
+import { accessSync, readFileSync, lstatSync, readdirSync } from 'fs';
+import { homedir } from 'os';
 import { parse, resolve, normalize } from 'path';
 
 // initialize prototypes
@@ -104,7 +105,7 @@ function _checkFileContains(path_str, search_any, path_is_data_bool) {
     // compose path from content item
     const content_item_path_str = path_str+'/'+contents_arr[i];
 
-    if (statSync(content_item_path_str).isDirectory()) {
+    if (lstatSync(content_item_path_str).isDirectory()) {
       // exclude directory by regexp
       if (opt_exclude_regexp_obj && opt_exclude_regexp_obj.test(content_item_path_str)) {
         continue;
@@ -146,7 +147,7 @@ function _checkFileContains(path_str, search_any, path_is_data_bool) {
  *   - `dirs_all` {Array}: a list of all directories traversed in search of the found file
  * @return {String|Object}
  */
-export default function eitherFile(path_str_or_arr, options_obj) {
+function eitherFile(path_str_or_arr, options_obj) {
   try {
     // define input type
     const path_type_str = (typeof path_str_or_arr === 'string') ? 'string' : (Array.isArray(path_str_or_arr)) ? 'array' : 'error';
@@ -175,11 +176,24 @@ export default function eitherFile(path_str_or_arr, options_obj) {
     // normalize the base path
     opt_base_dir_str = normalize(opt_base_dir_str);
 
+    // replace home directory symbol if defined
+    opt_base_dir_str = _proto_str.replace.call(opt_base_dir_str, '~', homedir());
+
     // normalize path to array
-    const path_arr = (path_type_str === 'array') ? path_str_or_arr : _proto_str.split.call(path_str_or_arr, opt_delim_str);
+    let path_arr = (path_type_str === 'array') ? path_str_or_arr : _proto_str.split.call(path_str_or_arr, opt_delim_str);
+
+    // clean up paths
+    path_arr = _proto_arr.map.call(path_arr, function(_path_str) {
+      // normalize
+      _path_str = (typeof _path_str === 'string') ? normalize(_path_str) : _path_str;
+      return _path_str;
+    });
 
     // define cache for directory crawl [for `down` option]
-    const crawl_cache_obj = {};
+    const cache_dir_crawl_obj = {};
+
+    // define cache for directory traversal tracking [`dirs_all` result property]
+    const cache_dirs_all_obj = {};
 
     const result_obj = _proto_arr.reduce.call(path_arr, function(_acc_obj, _input_any) {
       // exit quickly if file is found
@@ -203,7 +217,15 @@ export default function eitherFile(path_str_or_arr, options_obj) {
       const file_root_str = path_info_obj.dir;
 
       // add directory to traversal cache
-      _proto_arr.push.call(_acc_obj.dirs_all, file_root_str);
+      if (!cache_dirs_all_obj[file_root_str]) {
+        /** Directory is not in cache */
+
+        // persist to result cache
+        _proto_arr.push.call(_acc_obj.dirs_all, file_root_str);
+
+        // add to cache to prevent duplication
+        cache_dirs_all_obj[file_root_str] = true;
+      }
 
       // define full path
       let file_full_str = `${file_root_str}/${file_str}`;
@@ -245,8 +267,16 @@ export default function eitherFile(path_str_or_arr, options_obj) {
           // update directory
           file_root_up_str = normalize(file_root_up_str+'/..');
 
-          // add directory to traversal path
-          _proto_arr.push.call(_acc_obj.dirs_all, file_root_up_str);
+          // add directory to traversal cache
+          if (!cache_dirs_all_obj[file_root_up_str]) {
+            /** Directory is not in cache */
+
+            // persist to result cache
+            _proto_arr.push.call(_acc_obj.dirs_all, file_root_up_str);
+
+            // add to cache to prevent duplication
+            cache_dirs_all_obj[file_root_up_str] = true;
+          }
 
           // define full path
           file_full_str = `${file_root_up_str}/${file_str}`;
@@ -283,13 +313,13 @@ export default function eitherFile(path_str_or_arr, options_obj) {
         // initialize files list
         let files_arr;
 
-        if (crawl_cache_obj[file_root_str]) {
+        if (cache_dir_crawl_obj[file_root_str]) {
           /**
            * Cached crawl list available
            * - Do not crawl again
            */
 
-          files_arr = crawl_cache_obj[file_root_str];
+          files_arr = cache_dir_crawl_obj[file_root_str];
         }
         else {
           /**
@@ -304,7 +334,7 @@ export default function eitherFile(path_str_or_arr, options_obj) {
           });
 
           // save to cache
-          crawl_cache_obj[file_root_str] = _proto_arr.slice.call(files_arr);
+          cache_dir_crawl_obj[file_root_str] = _proto_arr.slice.call(files_arr);
         }
 
         // cycle files
@@ -315,8 +345,16 @@ export default function eitherFile(path_str_or_arr, options_obj) {
           // get directory from file item
           const file_item_dir_str = parse(file_item_str).dir;
 
-          // add directory to traversal path
-          _proto_arr.push.call(_acc_obj.dirs_all, file_item_dir_str);
+          // add directory to traversal cache
+          if (!cache_dirs_all_obj[file_item_dir_str]) {
+            /** Directory is not in cache */
+
+            // persist to result cache
+            _proto_arr.push.call(_acc_obj.dirs_all, file_item_dir_str);
+
+            // add to cache to prevent duplication
+            cache_dirs_all_obj[file_item_dir_str] = true;
+          }
 
           if ((_proto_str.match.call(file_item_str, file_str))) {
             /** file is found */
@@ -351,3 +389,6 @@ export default function eitherFile(path_str_or_arr, options_obj) {
     console.error(err);
   }
 }
+
+// export module
+export default eitherFile;

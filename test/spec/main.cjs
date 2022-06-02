@@ -19,6 +19,29 @@ function _sliceFrom(input_str, delim_str, from_int) {
 }
 
 /**
+ * Check array for duplicate values
+ * @param {Array} input_arr - the array to check
+ * @return {Boolean}
+ */
+function _checkArrayForDuplicates(input_arr) {
+  const cache_obj = {};
+
+  for (let i = 0; i < input_arr.length; i++) {
+    const input_item_str = input_arr[i];
+
+    // return if duplicate found
+    if (cache_obj[input_item_str]) {
+      return true;
+    }
+
+    // add item to cache
+    cache_obj[input_item_str] = true;
+  }
+
+  return false;
+}
+
+/**
  * @param {Function} eitherFile -
  */
 function main(eitherFile) {
@@ -316,31 +339,12 @@ function main(eitherFile) {
 
     describe(`Using 'debug' option`, function() {
       // 1-10-1.
-      test('should return result of object type', function() {
-        const path_str = 'readme.md';
-        const result_any = eitherFile(path_str, {base: './test/assets/dirs/base/sub1/sub2', up: 2, debug: true});
+      test('should traverse more than 6 directories to find file', function() {
+        const path_str = '12';
+        const result_obj = eitherFile(path_str, {base: './test/assets/dirs/base/sub1', up: 2, down: 2, debug: true});
 
-        expect(typeof result_any).toBe('object');
-      });
-
-      // 1-10-2.
-      test('should return result object with defined properties', function() {
-        const path_str = 'readme.md';
-        const result_any = eitherFile(path_str, {base: './test/assets/dirs/base/sub1/sub2', up: 2, debug: true});
-
-        const result_keys_arr = Object.keys(result_any);
-        const result_prop_arr = ['dirs_all', 'dir_found', 'file', 'full'];
-
-        const result_contains_bool = _proto_arr.reduce.call(result_keys_arr, function(_acc_bool, _index_str) {
-          if (!_acc_bool) {
-            return false;
-          }
-
-          const _result_bool = _proto_arr.includes.call(result_prop_arr, _index_str);
-          return _result_bool;
-        }, true);
-
-        expect(result_contains_bool).toBe(true);
+        const result_int = result_obj.dirs_all.length;
+        expect(result_int).toBeGreaterThan(6);
       });
     });
   });
@@ -401,6 +405,49 @@ function main(eitherFile) {
         const result_any = eitherFile(path_str, {base: './test/assets/dirs/base/sub1', down: 3, excludeDir: undefined});
 
         expect(!!result_any).toBe(true);
+      });
+    });
+  });
+
+  describe('Verification', function() {
+    describe('Result shape', function() {
+      // 3-1-1.
+      test('should return result of object type', function() {
+        const path_str = 'readme.md';
+        const result_any = eitherFile(path_str, {base: './test/assets/dirs/base/sub1/sub2', up: 2, debug: true});
+
+        expect(typeof result_any).toBe('object');
+      });
+
+      // 3-1-2.
+      test('should return result object with defined properties', function() {
+        const path_str = 'readme.md';
+        const result_any = eitherFile(path_str, {base: './test/assets/dirs/base/sub1/sub2', up: 2, debug: true});
+
+        const result_keys_arr = Object.keys(result_any);
+        const result_prop_arr = ['dirs_all', 'dir_found', 'file', 'full'];
+
+        const result_contains_bool = _proto_arr.reduce.call(result_keys_arr, function(_acc_bool, _index_str) {
+          if (!_acc_bool) {
+            return false;
+          }
+
+          const _result_bool = _proto_arr.includes.call(result_prop_arr, _index_str);
+          return _result_bool;
+        }, true);
+
+        expect(result_contains_bool).toBe(true);
+      });
+    });
+
+    describe('Result values', function() {
+      test('should return list of traversal directories with no duplicate values', function() {
+        const path_str = '12';
+        const result_obj = eitherFile(path_str, {base: './test/assets/dirs/base', down: 4, debug: true});
+
+        const result_bool = _checkArrayForDuplicates(result_obj.dirs_all);
+
+        expect(result_bool).toBe(false);
       });
     });
   });
