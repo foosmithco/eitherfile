@@ -3,7 +3,7 @@
 Tentative file-path fetcher for Node.js.
 
 <div align="left">
-<img alt="NPM" src="https://img.shields.io/npm/v/eitherfile?style=for-the-badge"> <img alt="CircleCI" src="https://img.shields.io/circleci/build/github/foosmithco/eitherfile?style=for-the-badge"> <img alt="Codecov" src="https://img.shields.io/codecov/c/github/foosmithco/eitherfile?style=for-the-badge"> <img alt="Github Issues" src="https://img.shields.io/github/issues-raw/foosmithco/eitherfile?style=for-the-badge"> <img alt="Github License" src="https://img.shields.io/github/license/foosmithco/eitherfile?style=for-the-badge">
+<img alt="NPM" src="https://img.shields.io/npm/v/eitherfile?style=for-the-badge"> <img alt="GitHub Workflow Status (branch)" src="https://img.shields.io/github/workflow/status/foosmithco/eitherfile/test-eitherfile/main?style=for-the-badge"> <img alt="Codecov" src="https://img.shields.io/codecov/c/github/foosmithco/eitherfile?style=for-the-badge"> <img alt="Github Issues" src="https://img.shields.io/github/issues-raw/foosmithco/eitherfile?style=for-the-badge"> <img alt="Github License" src="https://img.shields.io/github/license/foosmithco/eitherfile?style=for-the-badge">
 </div>
 
 

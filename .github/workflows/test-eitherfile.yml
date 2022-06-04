@@ -1,0 +1,29 @@
+name: test-eitherfile
+on: [push]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+      - name: Check Node version
+        run: node -v
+      - name: Check NPM version
+        run: npm -v
+      - name: Run tests for CommonJS
+        run: npm run test:cjs
+      - name: Run tests for ESM
+        run: npm run test:esm
+      - name: Upload coverage report for CJS
+        uses: codecov/codecov-action@v2
+        with:
+          directory: ./test/coverage/cjs
+          verbose: true
+      - name: Upload coverage report for ESM
+        uses: codecov/codecov-action@v2
+        with:
+          directory: ./test/coverage/esm
+          verbose: true
